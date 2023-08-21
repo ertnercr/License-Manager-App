@@ -16,8 +16,17 @@ function App(manifest: any) {
 
 @App(manifest)
 export class TemplateApp {
+
+   
+
     public GetMainController() {
        return AppController;
+    }
+
+    public GetMainThemeColor() {
+
+        return '#344b5b';
+
     }
 }
 
