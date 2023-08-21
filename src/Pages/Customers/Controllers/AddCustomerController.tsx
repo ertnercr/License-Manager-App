@@ -12,7 +12,7 @@ interface IValues {
   is_active: boolean
 }
 
-const valuesParam:IValues = {
+const valuesParam: IValues = {
   tenant_id: '',
   customer_manager_name: '',
   customer_manager_email: '',
@@ -45,7 +45,7 @@ export class AddCustomerController extends UIController {
     return HStack(
       ReactView(
         <div style={{ width: '100%', height: '100%' }}>
-          <Navbar />
+          <Navbar pageName={"Müşteri Listesi"} />
 
           <div
             style={{

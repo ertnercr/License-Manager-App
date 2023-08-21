@@ -101,7 +101,7 @@ export class AddLicenseController extends UIController{
             HStack(
                 ReactView(
                     <div style={{width:"100%",height:"100%"}}>
-                     <Navbar/>
+                    <Navbar pageName={"Müşteri Listesi"} />
                      
                      <div style={{width:"100%",height:"100%",display:"flex",justifyContent:"center",alignItems:"flex-start",marginTop:"50px"}}>  
                   <div style={{backgroundColor:"#F5F5F5",display:"flex",width:"800px",height:"670px",flexDirection:"column"}}> 

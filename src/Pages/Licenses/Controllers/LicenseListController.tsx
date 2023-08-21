@@ -43,7 +43,7 @@ export class LicenseListController extends UIController{
                 ReactView(
                     <div style={{width:"100%",height:"100%"}}>
                
-                <Navbar/>
+               <Navbar pageName={"Müşteri Listesi"} />
                 
                 <div style={{width:"100%",height:"100%",display:"flex",justifyContent:"center"}}>
                     
