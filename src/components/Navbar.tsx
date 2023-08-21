@@ -39,12 +39,13 @@ function Navbar({ pageName }: { pageName: string }) {
   ]
 
   return (
-    <div style={{ display: "flex", width: "100%", height: "60px", backgroundColor: "#738694", alignItems: "center" }}>
-      <div style={{ display: "flex", width: "95%", alignItems: "center", justifyContent: "space-between" }}>
-        <h2 style={{ position: "relative", left: "30px", color: "whitesmoke", fontWeight: "500", fontSize: "20px" }}>License Manager</h2>
+    <div style={{ display: "flex", height: "60px", width: "100%", backgroundColor: "#738694", alignItems: "center" }}>
+      <div style={{ display: "flex", width: "100%", alignItems: "center", justifyContent: "space-between", padding: "0px 40px" }}>
+        <h2 style={{ color: "whitesmoke", fontWeight: "500", fontSize: "20px" }}>License Manager</h2>
         <ul style={{ display: "flex", listStyle: "none", color: "whitesmoke" }}>
-          {menuItems.map(item => (
-            <li style={{ marginLeft: "7px", marginRight: "7px" }}>
+          {/* IF MENUITEMS LAST ELEMENT IS I MARGİN RİGHT NONE */}
+          {menuItems.map((item, i) => (
+            <li key={i} style={{ margin: menuItems.length === i ? "0 0 0 7px" : "0 7px" }}>
               <MenuButton onClick={() => { navigate(item.path) }} isActive={item.name === pageName}>{item.name}</MenuButton>
             </li>
           ))}
