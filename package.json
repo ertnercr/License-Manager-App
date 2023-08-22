@@ -130,7 +130,7 @@
         "@realmocean/bpmn": "^21.0.0-beta.2",
         "@realmocean/calendars": "^21.0.0-beta.29",
         "@realmocean/charts": "^0.0.6",
-        "@realmocean/common": "^1.0.201",
+        "@realmocean/common": "^21.0.10",
         "@realmocean/data": "^0.0.2",
         "@realmocean/diagram": "^0.0.2",
         "@realmocean/grids": "^19.2.59",

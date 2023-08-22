@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import PageContent from "../../../components/PageContent";
 import { ICustomer } from "../../../types/Interfaces";
 import { LicenseManagerBrokerClient } from "../../../api/LicenseManagerBrokerClient";
+import { ITenant, useOrgProvider } from "@realmocean/common";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 
@@ -16,6 +17,25 @@ export class CustomerListController extends UIController {
 
         const [searchValue, setSearchValue] = useState<string>("")
         const [customers, setCustomers] = useState<ICustomer[]>([])
+        const [tenants, setTenants] = useState<ITenant[]>([])
+
+
+        useEffect(() => {
+            Promise.all([
+                LicenseManagerBrokerClient.GetAllLicenseManagerCustomers(),
+                useOrgProvider().getTenants()
+            ]).then((res) => {
+                const [customers, tenants] = res
+
+                setCustomers(customers)
+                setTenants(tenants)
+                setIsLoading(false)
+
+            }).catch((err) => {
+                console.log(err)
+                alert("Müşteriler getirilemedi!")
+            })
+        }, [])
 
         const columns: GridColDef[] = [
             {
@@ -29,9 +49,13 @@ export class CustomerListController extends UIController {
                 flex: 1
             },
             {
-                headerName: "Müşteri Tenant Id",
+                headerName: "Müşteri Tenant",
                 field: "customer_tenant_id",
-                width: 200
+                width: 200,
+                valueGetter(params) {
+                    const tenant = tenants.find((tenant) => tenant.Id === params.value)
+                    return tenant ? tenant.Name : "Tanımsız"
+                },
             },
             {
                 headerName: "İşlemler",
@@ -45,15 +69,6 @@ export class CustomerListController extends UIController {
             }
         ]
 
-        useEffect(() => {
-            LicenseManagerBrokerClient.GetAllLicenseManagerCustomers().then((res) => {
-                setCustomers(res)
-                setIsLoading(false)
-            }).catch((err) => {
-                console.log(err)
-                alert("Müşteriler getirilemedi!")
-            })
-        }, [])
 
 
         return (
@@ -74,8 +89,6 @@ export class CustomerListController extends UIController {
                             } />
                     )
             ).fontFamily("Poppins,sans-serif")
-
-
         )
 
     }

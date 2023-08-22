@@ -30,11 +30,12 @@ const CustomSelectContainer = styled.div`
     margin-bottom: 20px;
     `;
 
-const SelectInput = ({ label, name, value, options, onChange, }: { label: string, name: string, value: string, options: any[], onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void }) => {
+const SelectInput = ({ label, name, value, options, onChange, }: { label: string, name: string, value: string, options: { value: string, text: string }[], onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void }) => {
     return (
         <CustomSelectContainer>
             <CustomSelectLabel>{label}</CustomSelectLabel>
             <CustomSelect value={value} name={name} onChange={onChange}>
+                <option value="" disabled selected hidden>Seçiniz</option>
                 {options.map((option, index) => (
                     <option key={index} value={option.value}>{option.text}</option>
                 ))}
