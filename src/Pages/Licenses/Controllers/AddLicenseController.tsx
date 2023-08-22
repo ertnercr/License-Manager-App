@@ -4,7 +4,6 @@ import Toast from '../../../components/Toast';
 import { Button} from '@mui/material';
 import Switch, { SwitchProps } from '@mui/material/Switch';
 import Navbar from '../../../components/Navbar';
-import { customerLicenseData } from '../../../assets/CustomerLicenseData';
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -120,9 +119,9 @@ export class AddLicenseController extends UIController{
             </label>
             <select  style={{width:"303px",height:"39px",paddingLeft:"5px",marginBottom:"30px",borderRadius:"8px"}} name="customer_name" onChange={onChange} defaultValue={"0"}>
             <option disabled value="0">Müşteri Seçiniz</option>
-            {customerLicenseData.map(item=>
+            {/* {customerLicenseData.map(item=>
             <option value={item.customer_name}>{item.customer_name}</option>
-            )}
+            )} */}
             </select>
 
 
@@ -162,7 +161,7 @@ export class AddLicenseController extends UIController{
                 Lisans Başlama Tarihi
             </label>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
+                {/* <DatePicker
                 format='DD/MM/YYYY'
                 value={date}
                 onChange={handleDate} 
@@ -172,7 +171,7 @@ export class AddLicenseController extends UIController{
                       style:{marginBottom:"30px",border:"1px solid rgb(118, 118, 118)",borderRadius:"8px"}
                     },
                   }}
-                />
+                /> */}
               </LocalizationProvider>
 
                                 

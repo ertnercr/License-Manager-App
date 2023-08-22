@@ -1,13 +1,12 @@
-import { Button } from '@mui/material'
 import { useNavigate } from '@tuval/forms'
 import React from 'react'
 import styled from 'styled-components'
 
 interface IMenuButtonStyle {
-  isActive?: boolean
+  isactivebutton?: boolean
 }
 
-function Navbar({ pageName }: { pageName: string }) {
+const Navbar = ({ pageName }: { pageName: string }) => {
   const navigate = useNavigate()
 
   const MenuButton = styled.div<IMenuButtonStyle>`
@@ -20,8 +19,8 @@ function Navbar({ pageName }: { pageName: string }) {
   cursor: pointer;
   font-size: 14px;
   padding: 5px 10px;
-  background-color: ${(props) => (props.isActive ? 'white' : 'transparent')};
-  color: ${(props) => (props.isActive ? 'black' : 'whitesmoke')};
+  background-color: ${(props) => (props.isactivebutton ? 'white' : 'transparent')};
+  color: ${(props) => (props.isactivebutton ? 'black' : 'whitesmoke')};
   transition: all 0.25s ease-in-out;
   &:hover {
     background-color: white;
@@ -35,7 +34,6 @@ function Navbar({ pageName }: { pageName: string }) {
   const menuItems = [
     { name: 'Müşteri Yönetimi', path: '/app/com.pedasoft.app.licensemanager/customers/list' },
     { name: 'Lisans Yönetimi', path: '/app/com.pedasoft.app.licensemanager/licenses/list' },
-    { name: 'Müşteri-Lisans İşlemleri', path: '/app/com.pedasoft.app.licensemanager/customers/license' },
   ]
 
   return (
@@ -46,7 +44,7 @@ function Navbar({ pageName }: { pageName: string }) {
           {/* IF MENUITEMS LAST ELEMENT IS I MARGİN RİGHT NONE */}
           {menuItems.map((item, i) => (
             <li key={i} style={{ margin: menuItems.length === i ? "0 0 0 7px" : "0 7px" }}>
-              <MenuButton onClick={() => { navigate(item.path) }} isActive={item.name === pageName}>{item.name}</MenuButton>
+              <MenuButton onClick={() => { navigate(item.path) }} isactivebutton={item.name === pageName}>{item.name}</MenuButton>
             </li>
           ))}
         </ul>

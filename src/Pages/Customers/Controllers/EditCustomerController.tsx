@@ -3,7 +3,6 @@ import React,{useState,useEffect} from "react";
 import Switch, { SwitchProps } from '@mui/material/Switch';
 import { Button } from "@mui/material";
 import Toast from "../../../components/Toast";
-import {customerData} from "../../../assets/CustomerData"
 import Navbar from "../../../components/Navbar";
 
 
@@ -44,7 +43,7 @@ export class EditCustomerController extends UIController{
         })
        
         useEffect(() => {
-            const filteredData = customerData.filter((customer) => customer.id ===this.id)
+            const filteredData = {}
             this.x=this.x+1
             console.log(this.x," kere çalıştım")
            setValues({

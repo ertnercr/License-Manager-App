@@ -12,19 +12,35 @@ const AddNewButton = styled.div`
     padding: 3px 10px;
     background-color: white;
     color: black;
+    margin-right: 5px;
     transition: all 0.25s ease-in-out;
     &:hover {
         background-color: rgb(255 255 255 / 57%);
     }
     `;
+const SearchInput = styled.input`
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+    margin-right: 10px;
+    &:focus {
+        outline: none;
+    }
+    `;
 
 
-const PageContent = ({ path, title, content }: { path: string, title: string, content: JSX.Element }) => {
+const PageContent = ({ path, title, content, searchValue, searchFunc, addNewButtonText, addNewButtonOnClick }: {
+    path: string, title: string, content: JSX.Element, searchValue?: string,
+    searchFunc?: (e: React.ChangeEvent<HTMLInputElement>) => void, addNewButtonText?: string, addNewButtonOnClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+}) => {
     return (
         <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", gap: 20 }}>
-            <div style={{ height: "35px", color: "darkslategrey", backgroundColor: "rgb(115 134 148 / 45%)", display: "flex", justifyContent: "space-between", padding: "0 40px", alignItems: "center", width: "100%" }}>
+            <div style={{ height: "40px", color: "darkslategrey", backgroundColor: "rgb(115 134 148 / 45%)", display: "flex", justifyContent: "space-between", padding: "0 40px", alignItems: "center", width: "100%" }}>
                 <div><span style={{ fontSize: "14px" }}>{path}</span></div>
-                <div><AddNewButton>Yeni Müşteri Ekle</AddNewButton></div>
+                <div style={{ display: "flex" }}>
+                    {searchValue != null && <SearchInput type="text" value={searchValue} onChange={searchFunc} placeholder="Ara" />}
+                    {addNewButtonText && <AddNewButton onClick={addNewButtonOnClick}>{addNewButtonText}</AddNewButton>}
+                </div>
             </div>
             {/* PAGE CENTER TITLE */}
             <div style={{ height: "50px", display: "flex", justifyContent: "center", alignItems: "center" }}>

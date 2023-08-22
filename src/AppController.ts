@@ -1,4 +1,4 @@
-import { HStack, Text, UIController, UIView } from '@tuval/forms';
+import { HStack, UIController, UIView } from '@tuval/forms';
 import { Routers } from './App/Views/Routers';
 
 
