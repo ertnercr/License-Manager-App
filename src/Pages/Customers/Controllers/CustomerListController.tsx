@@ -19,7 +19,6 @@ export class CustomerListController extends UIController {
         const [customers, setCustomers] = useState<ICustomer[]>([])
         const [tenants, setTenants] = useState<ITenant[]>([])
 
-
         useEffect(() => {
             Promise.all([
                 LicenseManagerBrokerClient.GetAllLicenseManagerCustomers(),
