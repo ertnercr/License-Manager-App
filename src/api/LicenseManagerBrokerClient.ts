@@ -1,6 +1,7 @@
 import { ICustomer, ICustomerCreate, ICustomerUpdate, ILicense, ILicenseCreate, ILicenseUpdate } from "../types/Interfaces";
 import { ConfigService } from "./ConfigService";
 import { RealmHttpClient } from "@tuval/forms";
+import { useSessionService } from '@realmocean/services';
 
 export class LicenseManagerBrokerClient {
 
@@ -10,6 +11,8 @@ export class LicenseManagerBrokerClient {
     public static async CreateLicenseManagerCustomer(data: ICustomerCreate): Promise<string> {
         return new Promise<string>((resolve, reject) => {
             const form = new FormData();
+            form.append("account_id", useSessionService().AccountId);
+            form.append("tenant_id", useSessionService().TenantId);
             form.append('data', JSON.stringify(data));
             RealmHttpClient.Post(
                 ConfigService.GetLicenseManagerBrokerURL() + "/CreateLicenseManagerCustomer", form
@@ -26,8 +29,10 @@ export class LicenseManagerBrokerClient {
     // GET ALL CUSTOMERS
     public static async GetAllLicenseManagerCustomers(): Promise<ICustomer[]> {
         return new Promise<ICustomer[]>((resolve, reject) => {
+            const form = new FormData();
+            form.append("tenant_id", useSessionService().TenantId);
             RealmHttpClient.Post(
-                ConfigService.GetLicenseManagerBrokerURL() + "/GetAllLicenseManagerCustomers"
+                ConfigService.GetLicenseManagerBrokerURL() + "/GetAllLicenseManagerCustomers", form
             ).then((response) => {
                 resolve(response.data);
             }).catch((error) => {
@@ -41,6 +46,8 @@ export class LicenseManagerBrokerClient {
         return new Promise<ICustomer>((resolve, reject) => {
             const form = new FormData();
             form.append('id', id);
+            form.append("account_id", useSessionService().AccountId);
+            form.append("tenant_id", useSessionService().TenantId);
             RealmHttpClient.Post(
                 ConfigService.GetLicenseManagerBrokerURL() + "/GetLicenseManagerCustomerById", form
             ).then((response) => {
@@ -56,6 +63,8 @@ export class LicenseManagerBrokerClient {
         return new Promise<string>((resolve, reject) => {
             const form = new FormData();
             form.append('data', JSON.stringify(data));
+            form.append("account_id", useSessionService().AccountId);
+            form.append("tenant_id", useSessionService().TenantId);
             RealmHttpClient.Post(
                 ConfigService.GetLicenseManagerBrokerURL() + "/UpdateLicenseManagerCustomer", form
             ).then((response) => {
@@ -70,6 +79,8 @@ export class LicenseManagerBrokerClient {
     public static async DeleteLicenseManagerCustomer(id: string, updated_at: Date): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             const form = new FormData();
+            form.append("account_id", useSessionService().AccountId);
+            form.append("tenant_id", useSessionService().TenantId);
             form.append('id', id);
             form.append('updated_at', updated_at.toString());
             RealmHttpClient.Post(
@@ -91,6 +102,8 @@ export class LicenseManagerBrokerClient {
         return new Promise<string>((resolve, reject) => {
             const form = new FormData();
             form.append('data', JSON.stringify(data));
+            form.append("account_id", useSessionService().AccountId);
+            form.append("tenant_id", useSessionService().TenantId);
             RealmHttpClient.Post(
                 ConfigService.GetLicenseManagerBrokerURL() + "/CreateLicenseManagerLicense", form
             )
@@ -106,6 +119,9 @@ export class LicenseManagerBrokerClient {
     // GET ALL LICENSES
     public static async GetAllLicenseManagerLicenses(): Promise<ILicense[]> {
         return new Promise<ILicense[]>((resolve, reject) => {
+            const form = new FormData();
+            form.append("account_id", useSessionService().AccountId);
+            form.append("tenant_id", useSessionService().TenantId);
             RealmHttpClient.Post(
                 ConfigService.GetLicenseManagerBrokerURL() + "/GetAllLicenseManagerLicenses"
             ).then((response) => {
@@ -120,6 +136,8 @@ export class LicenseManagerBrokerClient {
     public static async GetLicenseManagerLicenseById(id: string): Promise<ILicense> {
         return new Promise<ILicense>((resolve, reject) => {
             const form = new FormData();
+            form.append("account_id", useSessionService().AccountId);
+            form.append("tenant_id", useSessionService().TenantId);
             form.append('id', id);
             RealmHttpClient.Post(
                 ConfigService.GetLicenseManagerBrokerURL() + "/GetLicenseManagerLicenseById", form
@@ -135,6 +153,8 @@ export class LicenseManagerBrokerClient {
     public static async UpdateLicenseManagerLicense(data: ILicenseUpdate): Promise<string> {
         return new Promise<string>((resolve, reject) => {
             const form = new FormData();
+            form.append("account_id", useSessionService().AccountId);
+            form.append("tenant_id", useSessionService().TenantId);
             form.append('data', JSON.stringify(data));
             RealmHttpClient.Post(
                 ConfigService.GetLicenseManagerBrokerURL() + "/UpdateLicenseManagerLicense", form
@@ -150,6 +170,8 @@ export class LicenseManagerBrokerClient {
     public static async DeleteLicenseManagerLicense(id: string, updated_at: Date): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             const form = new FormData();
+            form.append("account_id", useSessionService().AccountId);
+            form.append("tenant_id", useSessionService().TenantId);
             form.append('id', id);
             form.append('updated_at', updated_at.toString());
             RealmHttpClient.Post(
