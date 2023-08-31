@@ -53,7 +53,7 @@ export class LicenseManagerBrokerClient {
             ).then((response) => {
                 resolve(response.data);
             }).catch((error) => {
-                reject(error.response.data?.detail);
+                reject(error.response.data?.detail);    
             });
         });
     }
@@ -123,7 +123,7 @@ export class LicenseManagerBrokerClient {
             form.append("account_id", useSessionService().AccountId);
             form.append("tenant_id", useSessionService().TenantId);
             RealmHttpClient.Post(
-                ConfigService.GetLicenseManagerBrokerURL() + "/GetAllLicenseManagerLicenses"
+                ConfigService.GetLicenseManagerBrokerURL() + "/GetAllLicenseManagerLicenses",form
             ).then((response) => {
                 resolve(response.data);
             }).catch((error) => {

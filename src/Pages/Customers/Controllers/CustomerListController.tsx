@@ -4,17 +4,16 @@ import PageContent from "../../../components/PageContent";
 import { ICustomer } from "../../../types/Interfaces";
 import { LicenseManagerBrokerClient } from "../../../api/LicenseManagerBrokerClient";
 import { ITenant, useOrgProvider } from "@realmocean/common";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-
+import { DataGrid, GridActionsCellItem, GridColDef } from "@mui/x-data-grid";
+import EditIcon from '@mui/icons-material/Edit';
 
 export class CustomerListController extends UIController {
 
 
     public LoadView(): UIView {
         const navigate = useNavigate()
-
+        const [filteredCustomers,setFilteredCustomers]=useState<ICustomer[]>([])
         const [isLoading, setIsLoading] = useState<boolean>(true)
-
         const [searchValue, setSearchValue] = useState<string>("")
         const [customers, setCustomers] = useState<ICustomer[]>([])
         const [tenants, setTenants] = useState<ITenant[]>([])
@@ -36,6 +35,8 @@ export class CustomerListController extends UIController {
             })
         }, [])
 
+
+        
         const columns: GridColDef[] = [
             {
                 headerName: "Müşteri Adı",
@@ -57,33 +58,45 @@ export class CustomerListController extends UIController {
                 },
             },
             {
-                headerName: "İşlemler",
-                field: "actions",
+                field: 'actions',
+                type: 'actions',
                 width: 100,
-                renderCell: (params) => (
-                    <div>
-                        a
-                    </div>
-                )
-            }
+                getActions: (e) => [
+                  <GridActionsCellItem onClick={()=>{navigate("/app/com.pedasoft.app.licensemanager/customers/edit/"+e.id)}} icon={<EditIcon />} label="Edit" />,
+                 
+                ],
+              },
         ]
+   
+        const filterCustomersByProperty = (customers: ICustomer[], searchValue: string): ICustomer[] => {
+            const filteredCustomers = customers.filter(customer => {
+                const customerValues = Object.values(customer);
 
+                for (const value of customerValues) {
+                    if (typeof value === "string" && value.toLowerCase().includes(searchValue.toLowerCase())) {
+                        return true;}}
+                return false;
+            });
 
+            return filteredCustomers;
+        };
+        
 
         return (
-            HStack({ alignment: cTop })(
-                isLoading ? VStack(Spinner()) :
+            HStack(
+                isLoading ? Spinner() :
                     ReactView(
                         <PageContent
                             path="Ana Sayfa > Müşteri Yönetimi > Müşteri Listesi"
                             title="Müşteri Listesi"
                             searchValue={searchValue}
-                            searchFunc={(e) => setSearchValue(e.target.value)}
+                            searchFunc={(e)=>setSearchValue(e.target.value)}
                             addNewButtonText="Yeni Müşteri Ekle"
+                            searchArea={customers}
                             addNewButtonOnClick={() => navigate("/app/com.pedasoft.app.licensemanager/customers/add")}
                             content={
-                                <div style={{ width: "100%", height: "100%", paddingBottom: "10px" }}>
-                                    <DataGrid rows={customers} columns={columns} />
+                                <div style={{ width: "100%", height: "90%", paddingBottom: "10px" }}>
+                                    <DataGrid  rows={filterCustomersByProperty(customers,searchValue)} columns={columns} />
                                 </div>
                             } />
                     )

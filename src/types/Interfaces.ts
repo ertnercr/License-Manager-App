@@ -5,6 +5,7 @@ export interface ICustomerCreate {
     email: string;
     customer_tenant_id: string;
     created_at: Date;
+    is_active:boolean;
 }
 
 export interface ICustomer {
@@ -22,7 +23,7 @@ export interface ICustomer {
 }
 
 export interface ICustomerUpdate {
-    id: string;
+    id:string;
     name: string;
     email: string;
     customer_tenant_id: string;
@@ -41,8 +42,8 @@ export interface ICustomerDelete {
 export interface ILicenseCreate {
     customer_id: string;
     app_id: string;
-    starting_date: Date;
-    ending_date: Date;
+    starting_date: string;
+    ending_date: string;
     type: string;
     period: string;
     created_at: Date;
@@ -51,7 +52,7 @@ export interface ILicenseCreate {
 export interface ILicense {
     id: string;
     customer_id: string;
-    name: string;
+    app_id: string;
     starting_date: string;
     ending_date: string;
     type: string;
@@ -64,27 +65,16 @@ export interface ILicense {
     updated_by: string;
     tenant_id: string;
 }
-
-export interface ILicenseCreate {
-    id: string,
-    customer_id: string;
-    app_id: string;
-    starting_date: Date;
-    ending_date: Date;
-    type: string;
-    period: string;
-    updated_at: Date;
-}
-
 export interface ILicenseUpdate {
     id: string;
     customer_id: string;
     app_id: string;
-    starting_date: Date;
-    ending_date: Date;
+    starting_date: string;
+    ending_date: string;
     type: string;
     period: string;
     updated_at: Date;
+    is_active:boolean;
 }
 
 export interface ILicenseDelete {

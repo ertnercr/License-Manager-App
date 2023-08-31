@@ -1,59 +1,149 @@
-import { HStack, ReactView, UIController, UIView, useNavigate } from '@tuval/forms';
-import React from 'react'
-import { DataGrid, GridRowsProp, GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
-import type { } from '@mui/x-data-grid/themeAugmentation';
-import EditIcon from '@mui/icons-material/Edit';
+import { HStack, ReactView, Spinner, UIController, UIView, useNavigate } from "@tuval/forms";
+import React, { useEffect, useState } from "react";
+import { DataGrid, GridRowsProp, GridColDef, GridActionsCellItem,GridToolbar } from "@mui/x-data-grid";
+import type {} from "@mui/x-data-grid/themeAugmentation";
+import EditIcon from "@mui/icons-material/Edit";
 import { Button, Typography, gridClasses } from "@mui/material";
-import { colorPicker } from "../../../components/ColorPicker"
+import { colorPicker } from "../../../components/ColorPicker";
+import Chip from "@mui/material/Chip";
+import Navbar from "../../../components/Navbar";
+import { LicenseManagerBrokerClient } from "../../../api/LicenseManagerBrokerClient";
+import { ITenant, useOrgProvider } from "@realmocean/common";
+import { ICustomer, ILicense } from "../../../types/Interfaces";
+import PageContent from "../../../components/PageContent";
+import { licenseNames } from "../../../assets/licenses";
+
 export class LicenseListController extends UIController {
-    public LoadView(): UIView {
+  public LoadView(): UIView {
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [searchValue, setSearchValue] = useState<string>("");
+    const [licenses, setLicenses] = useState<ILicense[]>([]);
+    const [tenants, setTenants] = useState<ITenant[]>([]);
+    const [customers, setCustomers] = useState<ICustomer[]>([]);
+    useEffect(() => {
+      Promise.all([LicenseManagerBrokerClient.GetAllLicenseManagerLicenses(), useOrgProvider().getTenants(), LicenseManagerBrokerClient.GetAllLicenseManagerCustomers()])
+        .then(res => {
+          const [license, tenant, customer] = res;
+          setLicenses(license);
+          setCustomers(customer);
+          setTenants(tenant);
+          setIsLoading(false);
+        })
+        .catch(err => {
+          console.log("err", err);
+          alert("Müşteriler getirilemedi!");
+        });
+    }, []);
 
-        const navigate = useNavigate()
-        // const rows: GridRowsProp = customerLicenseData.map((customer) => ({
-        //     id: customer.customer_id,
-        //     col1: customer.customer_name,
-        //     col2: customer.licenses.map(item =>
+  
+    const columns: GridColDef[] = [
+      {
+        field: "customer_id",
+        headerName: "Müşteri Adı",
+        valueGetter(params) {
+          const customer = customers.find(customer => customer.id === params.value);
+          return customer ? customer.name : "Tanımsız";
+        },
+        flex:1,
+        editable: false,
+        disableColumnMenu: true,
+      },
 
-        //         <div key={item.id} title={`Lisans Bitiş Tarihi: ${item.expire}`} style={{ display: "flex", justifyContent: "center", backgroundColor: `${colorPicker(item.name)}`, color: "white", height: "24px", alignItems: "center", paddingLeft: "5px", paddingRight: "5px", borderRadius: "4px", marginRight: "2.5px" }}> {item.name}  </div>),
+      { 
+        field: "app_id",
+        valueGetter(params){
+          const selectedLicense=licenseNames.find(license=>license.id===params.value);
+          return selectedLicense? selectedLicense.name: "Bulunamadı"
+        },
+        headerName: "Lisans Adı",
+        flex:1,
+        editable: false,
+        disableColumnMenu: true
+      },
 
-        //     col3: customer.licenses.map(item => item.id),
+      {
+        field: "type",
+        headerName:"Lisans Türü",
+        flex:1,
+        editable: false,
+        sortable: false,
+        disableColumnMenu: true
+      },
+      { 
+        field: "starting_date",
+        headerName: "Lisans Başlangıç Tarihi",
+        flex:1,
+        editable: false,
+        disableColumnMenu: true
+      },
 
-        // }));
-        const columns: GridColDef[] = [
-            { field: "id", headerName: "ID", width: 150, editable: true, disableColumnMenu: true },
-            { field: 'col1', headerName: 'Customer Name', width: 220, editable: true, disableColumnMenu: true },
-            { field: 'col2', headerName: 'Licences', width: 220, editable: true, sortable: false, disableColumnMenu: true, renderCell: (params) => <div style={{ display: "flex" }}>{params.value}</div>, },
-            { field: "col3", headerName: "Licence Ids", width: 220, editable: true, disableColumnMenu: true },
-            {
-                field: 'actions',
-                type: 'actions',
-                width: 100,
-                getActions: (e) => [
-                    <GridActionsCellItem onClick={() => { navigate("/app/com.pedasoft.app.licensemanager/licenses/edit/" + e.id) }} icon={<EditIcon />} label="Edit" />,
+      { 
+        field: "ending_date",
+        headerName: "Lisans Geçerlilik Süresi",
+        flex:1,
+        editable: false,
+        disableColumnMenu: true 
+      },
+      
+      {
+        field: "actions",
+        type: "actions",
+        headerName: "Düzenle/Sil",
+        flex:1,
+        getActions: e => [
+          <GridActionsCellItem
+            onClick={() => {
+              navigate("/app/com.pedasoft.app.licensemanager/licenses/edit/" + e.id);
+            }}
+            icon={<EditIcon />}
+            label="Edit"
+          />,
+        ],
+      },
+    ];
+   
+    const searchLicenses = (
+      licenses: ILicense[],
+      searchTerm: string
+  ): ILicense[] => {
+      const filteredLicenses: ILicense[] = [];
+  
+      for (const license of licenses) {
+          if (
+              license.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              licenseNames.some(nameObj =>
+                  nameObj.id === license.app_id && nameObj.name.toLowerCase().includes(searchTerm.toLowerCase())
+              ) ||
+              customers.some(customer =>
+                  customer.id === license.customer_id && customer.name.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+          ) {
+              filteredLicenses.push(license);
+          }
+      }
+  
+      return filteredLicenses;
+  };
+    return HStack(
+      isLoading
+        ? Spinner()
+        : ReactView(
+            <PageContent
+            path="Ana Sayfa > Lisans Yönetimi > Lisans Listesi"
+            title="Lisans Listesi"
+            searchValue={searchValue}
+            searchFunc={(e) => setSearchValue(e.target.value)}
+            addNewButtonText="Yeni Lisans Kaydet"
+            addNewButtonOnClick={() => navigate("/app/com.pedasoft.app.licensemanager/licenses/add")}
+            content={
+                <div style={{ width: "100%", height: "100%", paddingBottom: "10px" }}>
+                    <DataGrid rows={searchLicenses(licenses,searchValue)} columns={columns} />
 
-                ],
-            },
-        ];
-
-        return (
-            HStack(
-                ReactView(
-                    <div style={{ width: "100%", height: "100%" }}>
-                        <div style={{ display: "flex", justifyContent: "center" }}>
-                            <div style={{ height: "90%", width: '51%', display: "flex", flexDirection: "column" }}>
-                                <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                                    <Typography variant="h3" component='h3' sx={{ textAlign: "center", mt: 0.5, mb: 3 }}>Lisans Listesi</Typography>
-                                    <div style={{ width: "38%", height: "100%", display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
-                                        <Button variant="contained" onClick={() => { navigate("/app/com.pedasoft.app.licensemanager/licenses/add") }} style={{ width: "115px", height: "36px", marginBottom: "10px", backgroundColor: "#3C8D40", textTransform: "none" }}>Lisans Ekle</Button>
-                                    </div>
-                                </div>
-                                {/* <DataGrid rows={rows} columns={columns} /> */}
-                            </div>
-                        </div>
-                    </div>
-                )
-            ).fontFamily("Poppins,sans-serif")
-        )
-
-    }
+                </div>
+            } />
+            
+          )
+    ).fontFamily("Poppins,sans-serif");
+  }
 }

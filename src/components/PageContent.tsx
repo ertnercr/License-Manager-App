@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { ICustomer, ILicense } from '../types/Interfaces';
 
 const AddNewButton = styled.div`
     white-space: nowrap;
@@ -29,22 +30,29 @@ const SearchInput = styled.input`
     `;
 
 
-const PageContent = ({ path, title, content, searchValue, searchFunc, addNewButtonText, addNewButtonOnClick }: {
+const PageContent = ({ path, title, content, searchValue, searchFunc,searchArea, addNewButtonText, addNewButtonOnClick }: {
+
+
     path: string, title: string, content: JSX.Element, searchValue?: string,
-    searchFunc?: (e: React.ChangeEvent<HTMLInputElement>) => void, addNewButtonText?: string, addNewButtonOnClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+    searchFunc?: (e: React.ChangeEvent<HTMLInputElement>) => void, searchArea?:(ICustomer[]|ILicense[]) , addNewButtonText?: string, addNewButtonOnClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }) => {
+
+  
     return (
         <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", gap: 20 }}>
             <div style={{ height: "40px", color: "darkslategrey", backgroundColor: "rgb(115 134 148 / 45%)", display: "flex", justifyContent: "space-between", padding: "0 40px", alignItems: "center", width: "100%" }}>
-                <div><span style={{ fontSize: "14px" }}>{path}</span></div>
+                <div>
+                    <span style={{ fontSize: "14px",fontWeight:"500" }}>{path}</span>
+                    </div>
                 <div style={{ display: "flex" }}>
                     {searchValue != null && <SearchInput type="text" value={searchValue} onChange={searchFunc} placeholder="Ara" />}
                     {addNewButtonText && <AddNewButton onClick={addNewButtonOnClick}>{addNewButtonText}</AddNewButton>}
                 </div>
             </div>
+
             {/* PAGE CENTER TITLE */}
             <div style={{ height: "50px", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <span style={{ fontSize: "20px", fontWeight: "500" }}>{title}</span>
+                <h2 style={{ fontSize: "23px", fontWeight: "500" }}>{title}</h2>
             </div>
             <div style={{
                 width: "100%",
